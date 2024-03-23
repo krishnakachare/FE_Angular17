@@ -1,0 +1,22 @@
+EMMET
+======
+!    generates HTML 5 boilerplate code
+
+h1{This is a Heading}
+
+p*5{This is Paragraph-$}
+
+#div1{This is div-1}
+
+.div2{This is a div with class}
+
+button.btn.btn-primary{This is Primary Button}
+
+table>tbody>tr*10>td*4{Data-$}
+
+
+
+HTML - content of a webpage
+CSS - for styling
+Bootstrap - Responsiveness + pre-defined components-table,carousel,modal,card
+Javascript - behaviour of a webpage

@@ -1,0 +1,61 @@
+# Install node js
+# Install git
+
+# Visual Studio Code:
+=====================
+1. Download and install vscode software from the below URL
+   https://code.visualstudio.com/download
+
+2. create a folder 'angular_11_march_2024' 
+   cmd   -->   code .   (vscode opens in the current folder)
+
+3. Go to Extensions Tab & install vscode extension 'open in browser' or live server
+
+4. create an HTML file 'demo_1.html' and add some HTML code
+
+5. To Open the html file in browser use the below shortcuts
+   Alt + b              (Opens the html file in the default browser)
+   Alt + Shift + b      (show you a list of browsers)
+
+# git repo : https://github.dev/sanjaysamantra1/Angular_11_March_2024
+
+===================================================
+How to Use Vscode
+=================
+1. download and install vs-code
+   https://code.visualstudio.com/download
+
+2. open vscode , open a folder (ex: angular_11_march_2024)
+
+3. Go to Extensions tab & install the below Extensions
+   'open in browser' / 'live server'
+   This extension will help to open html files in browser
+
+4. create a HTML file & add some code
+   !  (enter)
+   
+5. for Javascript either use internal/external javascript
+    <script>
+        let a = 10;
+        let b = 20;
+        console.log(`Addition of ${a} & ${b} is ${a + b}`)
+    </script>
+
+6. To Run HTML file in browser, try the below commands
+  Alt + b
+  Alt + Shift + b
+Note : above shortcuts will work only if you have installed 'open in browser'
+
+
+===================================================
+How to run only javascript code without HTML file
+-----------------------------------------------
+1. Download & install nodeJS
+
+2. create a JS file and add your code there (abc.js)
+
+3. open terminal in the folder where your JAvascript file is present
+   to open terminal in vs-code  (ctrl + `)
+
+4. Run the below command
+   node abc.js
