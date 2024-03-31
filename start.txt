@@ -2,7 +2,7 @@
 # Install git
 
 # Visual Studio Code:
-=====================
+============================================================
 1. Download and install vscode software from the below URL
    https://code.visualstudio.com/download
 

@@ -17,24 +17,19 @@
         },
     };
 
-    function containsValue(obj, val) {
-        let result;
+    function containsValue(obj, searchVal) {
         for (let key in obj) {
             let value = obj[key];
-            if (value === val) {
-                result = value === val ? true : false;
-                console.log(result)
-            } else if (typeof value === "object") {
-                containsValue(obj[key], val);
+            if (typeof value === "object") {
+                return containsValue(obj[key], searchVal);
+            } else if (value === searchVal) {
+                return true;
             };
         };
-        return result;
+        return false;
     };
 
-
-    // containsValue(nestedObject, 'hello')
-    console.log("RESULT", containsValue(nestedObject, 'hello')) // true
-    // console.log("RESULT", containsValue(nestedObject, 50)) // false
-
+    console.log(containsValue(nestedObject, 'hello'))   // true
+    console.log(containsValue(nestedObject, 50))        // false
 
 </script>
