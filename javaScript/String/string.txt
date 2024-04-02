@@ -61,7 +61,7 @@ concat();
 indexOf();
 lastIndexOf();
 includes();
-match();
+match(regex);
 replace();
 replaceAll();
 slice(start, end)
