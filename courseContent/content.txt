@@ -17,8 +17,22 @@ setTimeout , setInterval
 callBack , Promise , Async Await
 REST Parameter
 De-structuring
-Modules
 Generators
+offline storage   (HTML-5)
+
+#ES-6 Features
+============================
+let and const Keywords 
+Arrow Functions   
+Template Literals 
+Multi-line Strings 
+Default Parameters 
+Destructuring Assignment 
+Enhanced Object Literals 
+Classes  
+Modules 
+Promises,async await
+
 
 
 
