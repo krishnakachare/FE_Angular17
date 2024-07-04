@@ -1,0 +1,82 @@
+<div class="container border">
+    <h1 class="text-center">Directive Component</h1>
+
+    <ng-content></ng-content>
+
+    <h3 *ngIf="n%2==0">{{n}} is Even Number</h3>
+    <h3 *ngIf="n%2!=0">{{n}} is Odd Number</h3>
+
+    <div *ngIf="n%2==0; else elseBlock">
+        {{n}} is Even Number
+    </div>
+    <ng-template #elseBlock>{{n}} is Odd Number</ng-template>
+
+    <hr />
+
+    <h1 [ngSwitch]="x">
+        <p *ngSwitchCase="1">Monday</p>
+        <p *ngSwitchCase="2">Tuesday</p>
+        <p *ngSwitchCase="3">Wednesday</p>
+        <p *ngSwitchCase="4">Thursday</p>
+        <p *ngSwitchCase="5">Friday</p>
+        <p *ngSwitchCase="6">Saturday</p>
+        <p *ngSwitchCase="0">Sunday</p>
+        <p *ngSwitchDefault>Not a valid number</p>
+    </h1>
+
+    <ul>
+        <li *ngFor="let ele of cars;let i=index;let e=even;">
+            <span [ngStyle]="{'background-color': e ? 'red':'green'}">{{ele}} ----- {{i}}</span>
+        </li>
+    </ul>
+    <select>
+        <ng-container *ngFor="let car of cars">
+            <option *ngIf="flag">{{car}}</option>
+        </ng-container>
+    </select>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>index</th>
+                <th>eid</th>
+                <th>name</th>
+                <th>sal</th>
+                <th>gender</th>
+                <th>isFirst?</th>
+                <th>isLast?</th>
+                <th>isEven?</th>
+                <th>isOdd?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let emp of employees;trackBy:employeeTrackBy;let i=index;
+            let f = first;let l= last;let e=even;let o=odd">
+                <td>{{i+1}}</td>
+                <td>{{emp.eId}}</td>
+                <td>{{emp.name}}</td>
+                <td>{{emp.sal}}</td>
+                <td>{{emp.gender}}</td>
+                <td>{{f}}</td>
+                <td>{{l}}</td>
+                <td>{{e}}</td>
+                <td>{{o}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-primary" (click)="addEmployee()">Add Emp</button>
+
+    <h1 *ngIf="flag" appHighlight>This is Paragraph-1</h1>
+    <h1 [hidden]="!flag">This is Paragraph-2</h1>
+    <hr />
+
+    <div [ngStyle]="{'background-color': n%2!==0 ? 'red':'green'}">
+        {{n}} is {{n%2==0?'Even':'Odd'}} Number</div>
+
+    <button class="btn" [ngClass]="n%2==0 ?'btn-success':'btn-danger'">Click me</button>
+    <hr />
+
+    Custom Directive: <input type="text" numberonly />
+    <div appHighlight>This is a div, this div is using a custom directive</div>
+    <button clickcount>Click me</button>
+</div>
