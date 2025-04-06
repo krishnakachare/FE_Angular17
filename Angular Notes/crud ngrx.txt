@@ -1,0 +1,222 @@
+ 
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>COURSE NAME</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody *ngFor="let Data of emp">
+        <tr>
+            <td>{{Data.StdId}}</td>
+            <td>{{Data.StdName}}</td>
+            <td>{{Data.CourseName}}</td>
+            <td>
+                <button (click)="delete(Data.StdId)">Delete</button>
+                &nbsp;
+                <button>Update</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<br>
+
+
+ ID
+ <br>
+ <input type="number" #id>
+ <br>
+ Name
+ <br>
+ <input type="text" #name>
+ <br>
+ Course ID 
+ <br>
+ <input type="number" #cid>
+<br>
+<br>
+ <button (click)="add()">AddEmp</button>
+=================
+Employee.component.ts
+================
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { addEmployee, deleteEmployee, getEmployees } from '../../State-Management/Actions/EmployeeAction';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Employee } from '../../../Modal/Employees';
+import { EmployeesCrudeService } from '../../Services/employees-crude.service';
+import { selectEmployees } from '../../State-Management/Selectors/Employee.Selector';
+import { pipe } from 'rxjs';
+
+@Component({
+  selector: 'app-employees',
+  standalone: true,
+  imports: [CommonModule,FormsModule],
+  templateUrl: './employees.component.html',
+  styleUrl: './employees.component.css'
+})
+export class EmployeesComponent implements OnInit  {
+
+  @ViewChild("id") ID:any
+  @ViewChild("name") NAME:any
+  @ViewChild("cid") CID:any
+  emp:any []= []
+
+  
+
+  constructor(private store :Store<any> ,private service : EmployeesCrudeService)
+  {
+
+  }
+  
+  ngOnInit(): void {
+     this.store.dispatch(getEmployees())
+
+  // this.fetchemployee()
+     
+     this.store.select(pipe(selectEmployees)).subscribe({
+      next:(res=>{
+        console.log(res)
+      })
+     })
+  }
+  add()
+  {
+    let newEmployee: Employee = {
+      StdId: this.ID.nativeElement.value,
+      StdName: this.NAME.nativeElement.value,
+      CourseId: this.CID.nativeElement.value,
+      CourseName: "", // Set CourseName as needed
+    };
+    this.store.dispatch(addEmployee({employees:newEmployee}));
+    // this.fetchemployee()
+  }
+  delete(id:number)
+  {
+    this.store.dispatch(deleteEmployee({empid:id}))
+  }
+}
+===============
+Action.ts
+============
+import { createAction, props } from "@ngrx/store";
+import { Employee } from "../../../Modal/Employees";
+
+export const getEmployees = createAction("get-employees")
+export const setEmployees = createAction("set-employees",props<{ employees: Employee[] }>());
+ 
+export const addEmployee = createAction("add-employee", props<{ employees: Employee }>());
+export const deleteEmployee = createAction("delete-employee", props<{empid: number | Employee }>());
+===========
+Reducer.ts
+-============
+import { createReducer, on } from '@ngrx/store';
+import { addEmployee, deleteEmployee, setEmployees } from '../Actions/EmployeeAction';
+import { Employee } from '../../../Modal/Employees';
+
+export interface EmployeeState {
+  employees: Employee[];
+}
+
+export const initialState: EmployeeState = {
+  employees: []
+};
+
+export const employeeReducer = createReducer(
+  initialState,
+  on(setEmployees, (state, { employees }) => ({
+    ...state,
+    employees
+  })),
+  on(addEmployee, (state, { employees }) => ({
+    ...state,
+    employees: [...state.employees, employees]
+  })),
+  on(deleteEmployee, (state, { empid }) => ({
+    ...state,
+    employees: state.employees.filter(emp => emp.StdId !== empid)
+  }))
+);
+=============
+Effects.ts
+=============
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { mergeMap, map, catchError, concatMap, switchMap } from 'rxjs/operators';
+import { EmployeesCrudeService } from '../../Services/employees-crude.service';
+import { addEmployee, deleteEmployee, getEmployees, setEmployees } from '../Actions/EmployeeAction';
+import { Employee } from '../../../Modal/Employees';
+@Injectable()
+export class employeesEffect {
+  constructor(
+    private actions: Actions,
+    private empservice: EmployeesCrudeService
+  ) {}
+
+  FetchEmployees = createEffect(() =>
+    this.actions.pipe(
+       
+      ofType(getEmployees),
+      mergeMap(() =>
+      
+        this.empservice.getData()
+          .pipe(map((res) => setEmployees({ employees: res })))
+      )
+    )
+  );
+
+  addEmployee$ = createEffect(() =>
+    this.actions.pipe(
+      ofType(addEmployee),
+      mergeMap((action) =>
+        this.empservice.addEmployee(action.employees).pipe(
+        
+          map(() => addEmployee({ employees: action.employees })),
+          
+        )
+      )
+    )
+  );
+
+  deleteemployee = createEffect(()=>
+  this.actions.pipe(
+    ofType(deleteEmployee),
+    mergeMap((action)=>this.empservice.deleteemp(action.empid).pipe(
+      map(() => setEmployees({ employees: [] })),
+    ))
+
+  ))
+}
+
+=============
+Service.ts
+============
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Employee } from '../../Modal/Employees';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class EmployeesCrudeService {
+
+  constructor(private httpclient :HttpClient) { }
+
+  getData()
+  {
+    return this.httpclient.get<Employee[]>("http://localhost/Exmp-1/api/Students")
+  }
+  addEmployee(employee: Employee) {
+    return this.httpclient.post<Employee>("http://localhost/Exmp-1/api/Students", employee); // Assuming POST for adding
+  }
+  deleteemp(num:number |Employee) {
+    return this.httpclient.delete<Employee>(`http://localhost/Exmp-1/api/Students/ ${num}`) 
+  }
+}
+
+
+
